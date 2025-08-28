@@ -1,0 +1,20 @@
+navbar-top-center {
+  position: fixed;     /* îl fixează sus */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+/* adaugă spațiu sub navbar ca să nu acopere conținutul */
+body {
+  padding-top: 70px;  /* ajustează în funcție de înălțimea navbarului */
+}
+
+/* centrează conținutul navbarului */
+.navbar-top-center .navbar-brand,
+.navbar-top-center .nav {
+  text-align: center;
+  width: 100%;
+  justify-content: center;
+}
