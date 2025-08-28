@@ -10,7 +10,7 @@ function App() {
     <>
       <NavbarConst />
       <Homepage />
-      <footer />
+      <Footer />
     </>
   );
 }
