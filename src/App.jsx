@@ -1,10 +1,17 @@
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Homepage from "./pages/homepage";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
+import Homepage from "./pages/Homepage/Homepage";
 
 function App() {
   return (
     <>
-      <Homepage />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+      </Routes>
+      <Footer />
     </>
   );
 }
