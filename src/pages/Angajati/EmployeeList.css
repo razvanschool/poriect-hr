@@ -1,0 +1,109 @@
+.employee-list {
+
+    padding: 20px;
+
+}
+
+.add-btn {
+
+    padding: 10px 15px;
+    background: #3da9db;
+    color: white;
+    border: none;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+
+.cards-container {
+
+    display: flex;
+    gap: 15px;
+    
+}
+
+.employee-card {
+   background: #202020;
+   padding: 15px;
+   border-radius: 10px;
+   box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+   transition: transform 0.2s;
+
+}
+
+.employee-card:hover {
+
+    transform: scale(1.04);
+}
+
+.delete-btn {
+
+    background: #c01b05;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* MEDIA */
+
+/* Telefon */
+@media (max-width: 767px) {
+  .cards-container {
+
+    flex-direction: column;
+
+  }
+.employee-card {
+   width: 100%;
+
+}
+
+.add-btn {
+
+    width:100%;
+}
+
+}
+
+/* Tabletă */
+@media (min-width: 768px) and (max-width: 1023px) {
+  
+
+   .cards-container {
+
+    justify-content: center;
+
+  }
+.employee-card {
+
+   flex: 1 1 45%;
+
+}
+
+.add-btn {
+
+    font-size: 14px;
+}
+
+}
+
+/* Laptop */
+@media (min-width: 1024px) and (max-width: 1439px) {
+
+  .cards-container {
+
+    justify-content: flex-start;
+
+  }
+.employee-card {
+
+   flex: 1 1 22%;
+
+}
+
+
+
+}
+
