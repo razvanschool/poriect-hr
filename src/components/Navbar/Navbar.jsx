@@ -103,8 +103,8 @@ function Navbar() {
         </Link>
         <ul className="nav-links-container">
           <li>
-            <Link className="nav-links" to="/adauga ruta">
-              adauga ruta
+            <Link className="nav-links" to="/angajati">
+              Angajati
             </Link>
           </li>
           <li>

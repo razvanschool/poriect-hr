@@ -1,5 +1,5 @@
 {
-  "employee": {
+  "employee": [ {
     "id": 1,
     "first_name": "Ion",
     "last_name": "Popescu",
@@ -45,5 +45,5 @@
         }
       ]
     }
-  }
+  }]
 }
