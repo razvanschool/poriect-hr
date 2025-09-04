@@ -1,49 +1,22 @@
 {
-  "employee": [ {
-    "id": 1,
-    "first_name": "Ion",
-    "last_name": "Popescu",
-    "email": "ion.popescu@example.com",
-    "phone": "+40 712 345 678",
-    "position": "Software Engineer",
-    "department": "Development",
-    "salary": 5500,
-    "date_of_hire": "2020-06-15",
-    "address": {
-      "street": "Strada Libertății",
-      "city": "București",
-      "postal_code": "010101",
-      "country": "România"
+  "employee": [
+    {
+      "id": "ffb7",
+      "firstName": "Bogdan",
+      "lastName": "Bogdan",
+      "role": "BOSS",
+      "department": "IT",
+      "email": "bogdancipariu@yahoo.com",
+      "phone": "3434243"
     },
-    "manager": {
-      "id": 2,
-      "first_name": "Maria",
-      "last_name": "Ionescu",
-      "email": "maria.ionescu@example.com",
-      "phone": "+40 712 987 654",
-      "position": "Development Manager"
-    },
-    "is_active": true,
-    "vacation": {
-      "total_days": 20,
-      "days_taken": 8,
-      "remaining_days": 12,
-      "vacation_history": [
-        {
-          "start_date": "2023-07-10",
-          "end_date": "2023-07-15",
-          "days_taken": 5,
-          "type": "paid",
-          "reason": "Relaxare"
-        },
-        {
-          "start_date": "2023-12-01",
-          "end_date": "2023-12-02",
-          "days_taken": 3,
-          "type": "unpaid",
-          "reason": "Eveniment personal"
-        }
-      ]
+    {
+      "id": "c939",
+      "firstName": "Andrei",
+      "lastName": "Adrian",
+      "role": "Tehnician Mecanic",
+      "department": "Mentenanta",
+      "email": "adrianandrei@gmail.com",
+      "phone": "07451325435"
     }
-  }]
+  ]
 }
