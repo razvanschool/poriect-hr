@@ -1,125 +1,124 @@
 import React, { useState, useEffect } from "react";
-import CardAngajat from "../../components/CardAnagajat/CardAngajat";
-import employee from "../../../db.json";
+import CardAngajat from "../../components/CardAngajat/CardAngajat";
+import NewModal from "../../components/NewModal/NewModal";
 import "./Angajati.css";
 
-const EmployeeList = () => {
+const Angajati = () => {
   const [employees, setEmployees] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+
+  // filtr
+  const [searchName, setSearchName] = useState("");
+  const [filterDepartment, setFilterDepartment] = useState("");
+  const [filterRole, setFilterRole] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:3001/employee")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("test", data);
-        setEmployees(data);
-      });
+      .then((res) => res.json())
+      .then((data) => setEmployees(data))
+      .catch((err) => console.error("Eroare la fetch:", err));
   }, []);
 
-  const [employeeForm, setEmployeeForm] = useState({
-    firstName: "",
-    lastName: "",
-    role: "",
-    department: "",
-    email: "",
-    phone: "",
-  });
+  const addNewEmployee = async (employeeForm) => {
+    const { firstName, lastName, role, department, email, phone } = employeeForm;
 
-  const addNewEmployee = (e) => {
-    e.preventDefault();
-    const { firstName, lastName, role, department, email, phone } =
-      employeeForm;
     if (!firstName || !lastName || !role || !department || !email || !phone) {
       alert("Te rog completează toate câmpurile!");
       return;
     }
 
-    const newEmployee = {
-      id: employees.length + 1,
-      ...employeeForm,
-    };
+    try {
+      const response = await fetch("http://localhost:3001/employee", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(employeeForm),
+      });
 
-    setEmployees([...employees, newEmployee]);
+      if (!response.ok) throw new Error("Eroare la adăugarea angajatului!");
 
-    setEmployeeForm({
-      firstName: "",
-      lastName: "",
-      role: "",
-      department: "",
-      email: "",
-      phone: "",
-    });
+      const savedEmployee = await response.json();
+      setEmployees([...employees, savedEmployee]);
+      setShowModal(false);
+    } catch (err) {
+      console.error(err);
+      alert("A aparut o eroare la trimiterea datelor!");
+    }
   };
 
-  const deleteEmployee = (id) => {
-    setEmployees(employees.filter((emp) => emp.id !== id));
+  const deleteEmployee = async (id) => {
+    try {
+      await fetch(`http://localhost:3001/employee/${id}`, { method: "DELETE" });
+      setEmployees(employees.filter((emp) => emp.id !== id));
+    } catch (err) {
+      console.error("Eroare la stergere:", err);
+    }
   };
+
+  const filteredEmployees = employees
+    .filter((emp) =>
+      `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(searchName.toLowerCase())
+    )
+    .filter((emp) =>
+      filterDepartment ? emp.department === filterDepartment : true
+    )
+    .filter((emp) =>
+      filterRole ? emp.role === filterRole : true
+    )
+    .sort((a, b) => a.firstName.localeCompare(b.firstName));
+
+  const departments = [...new Set(employees.map(emp => emp.department))];
+  const roles = [...new Set(employees.map(emp => emp.role))];
 
   return (
     <div className="employee-list">
       <h2>Employee Directory</h2>
+      <button className="open-modal-btn" onClick={() => setShowModal(true)}>
+        Adaugă Angajat
+      </button>
+
+      {/* Filtrare fggfdg */}
+      <div className="filters">
+        <input
+          type="text"
+          placeholder="Caută după nume"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+        />
+        <select
+          value={filterDepartment}
+          onChange={(e) => setFilterDepartment(e.target.value)}
+        >
+          <option value="">Toate departamentele</option>
+          {departments.map((dep) => (
+            <option key={dep} value={dep}>{dep}</option>
+          ))}
+        </select>
+        <select
+          value={filterRole}
+          onChange={(e) => setFilterRole(e.target.value)}
+        >
+          <option value="">Toate functiile</option>
+          {roles.map((role) => (
+            <option key={role} value={role}>{role}</option>
+          ))}
+        </select>
+      </div>
+
       <div className="employee-cards">
-        {employees.map((employee) => (
+        {filteredEmployees.map((employee) => (
           <CardAngajat
-            deleteEmployee={deleteEmployee}
             key={employee.id}
             angajat={employee}
+            deleteEmployee={deleteEmployee}
           />
         ))}
       </div>
 
-      <form onSubmit={addNewEmployee} className="employee-form">
-        <input
-          type="text"
-          placeholder="Nume"
-          value={employeeForm.firstName}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, firstName: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Prenume"
-          value={employeeForm.lastName}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, lastName: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Rol"
-          value={employeeForm.role}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, role: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Departament"
-          value={employeeForm.department}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, department: e.target.value })
-          }
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={employeeForm.email}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, email: e.target.value })
-          }
-        />
-        <input
-          type="tel"
-          placeholder="Telefon"
-          value={employeeForm.phone}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, phone: e.target.value })
-          }
-        />
-        <button type="submit">Adaugă Angajat</button>
-      </form>
+      {showModal && (
+        <NewModal onAdd={addNewEmployee} onClose={() => setShowModal(false)} />
+      )}
     </div>
   );
 };
 
-export default EmployeeList;
+export default Angajati;
