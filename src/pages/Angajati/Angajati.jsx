@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import CardAngajat from "../../components/CardAnagajat/CardAngajat";
 import employee from "../../../db.json";
+import AddForm from "../../components/AddForm/AddForm";
+import Button from 'react-bootstrap/Button';
 import "./Angajati.css";
+
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -24,39 +27,42 @@ const EmployeeList = () => {
     phone: "",
   });
 
-  const addNewEmployee = (e) => {
-    e.preventDefault();
-    const { firstName, lastName, role, department, email, phone } =
-      employeeForm;
-    if (!firstName || !lastName || !role || !department || !email || !phone) {
-      alert("Te rog completează toate câmpurile!");
-      return;
-    }
-
-    const newEmployee = {
-      id: employees.length + 1,
-      ...employeeForm,
-    };
-
-    setEmployees([...employees, newEmployee]);
-
-    setEmployeeForm({
-      firstName: "",
-      lastName: "",
-      role: "",
-      department: "",
-      email: "",
-      phone: "",
-    });
-  };
-
   const deleteEmployee = (id) => {
+fetch(`http://localhost:3001/employee/${id}`, {
+      method: "DELETE",
+    })
+    .then((response) => {
+    if (!response.ok) {
+      throw new Error("Eroare la stergerea angajatului");
+    }
     setEmployees(employees.filter((emp) => emp.id !== id));
-  };
+    })
+    .catch((err) => console.error(err));
+  }
+  
+
+  const [show, setShow] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+  const [filterRole, setFilterRole] = useState("");
 
   return (
     <div className="employee-list">
       <h2>Employee Directory</h2>
+      <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
+        <option value={""}>Toti</option>
+        <option value={"Manager"}>Manager</option>
+        <option value={"HR"}>HR</option>
+        <option value={"Developer"}>Developer</option>
+      </select>
+      {[...employees]
+      .filter(emp => filterRole === "" ? true : emp.role === filterRole)
+      .sort((a, b) => a.role.localeCompare(b.role))
+      .map(emp => (
+      <CardAngajat key={emp.id} angajat={emp} deleteEmployee={deleteEmployee} />
+    ))}
       <div className="employee-cards">
         {employees.map((employee) => (
           <CardAngajat
@@ -67,57 +73,19 @@ const EmployeeList = () => {
         ))}
       </div>
 
-      <form onSubmit={addNewEmployee} className="employee-form">
-        <input
-          type="text"
-          placeholder="Nume"
-          value={employeeForm.firstName}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, firstName: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Prenume"
-          value={employeeForm.lastName}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, lastName: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Rol"
-          value={employeeForm.role}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, role: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Departament"
-          value={employeeForm.department}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, department: e.target.value })
-          }
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={employeeForm.email}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, email: e.target.value })
-          }
-        />
-        <input
-          type="tel"
-          placeholder="Telefon"
-          value={employeeForm.phone}
-          onChange={(e) =>
-            setEmployeeForm({ ...employeeForm, phone: e.target.value })
-          }
-        />
-        <button type="submit">Adaugă Angajat</button>
-      </form>
+      <AddForm 
+      employeeForm={employeeForm}
+      employees={employees}
+      setEmployeeForm={setEmployeeForm}
+      setEmployees={setEmployees}
+      handleClose={handleClose}
+      handleShow={handleShow}
+      show={show}
+      />
+
+      <Button variant="primary" onClick={handleShow}>
+        Launch demo modal
+      </Button>
     </div>
   );
 };
