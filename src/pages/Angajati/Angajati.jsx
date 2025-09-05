@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import CardAngajat from "../../components/CardAngajat/CardAngajat";
-import NewModal from "../../components/NewModal/NewModal";
+import CardAngajat from "../../components/CardAnagajat/CardAngajat";
+import NewModal from "../../components/NewModal";
 import "./Angajati.css";
 
 const Angajati = () => {
@@ -20,7 +20,8 @@ const Angajati = () => {
   }, []);
 
   const addNewEmployee = async (employeeForm) => {
-    const { firstName, lastName, role, department, email, phone } = employeeForm;
+    const { firstName, lastName, role, department, email, phone } =
+      employeeForm;
 
     if (!firstName || !lastName || !role || !department || !email || !phone) {
       alert("Te rog completează toate câmpurile!");
@@ -56,18 +57,18 @@ const Angajati = () => {
 
   const filteredEmployees = employees
     .filter((emp) =>
-      `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(searchName.toLowerCase())
+      `${emp.firstName} ${emp.lastName}`
+        .toLowerCase()
+        .includes(searchName.toLowerCase())
     )
     .filter((emp) =>
       filterDepartment ? emp.department === filterDepartment : true
     )
-    .filter((emp) =>
-      filterRole ? emp.role === filterRole : true
-    )
+    .filter((emp) => (filterRole ? emp.role === filterRole : true))
     .sort((a, b) => a.firstName.localeCompare(b.firstName));
 
-  const departments = [...new Set(employees.map(emp => emp.department))];
-  const roles = [...new Set(employees.map(emp => emp.role))];
+  const departments = [...new Set(employees.map((emp) => emp.department))];
+  const roles = [...new Set(employees.map((emp) => emp.role))];
 
   return (
     <div className="employee-list">
@@ -90,7 +91,9 @@ const Angajati = () => {
         >
           <option value="">Toate departamentele</option>
           {departments.map((dep) => (
-            <option key={dep} value={dep}>{dep}</option>
+            <option key={dep} value={dep}>
+              {dep}
+            </option>
           ))}
         </select>
         <select
@@ -99,7 +102,9 @@ const Angajati = () => {
         >
           <option value="">Toate functiile</option>
           {roles.map((role) => (
-            <option key={role} value={role}>{role}</option>
+            <option key={role} value={role}>
+              {role}
+            </option>
           ))}
         </select>
       </div>
