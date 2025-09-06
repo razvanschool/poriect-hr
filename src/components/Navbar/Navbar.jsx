@@ -127,6 +127,12 @@ function Navbar() {
               adauga ruta
             </Link>
           </li>
+          <li>
+  <Link className="nav-links" to="/concedii">
+    Concedii
+  </Link>
+</li>
+
         </ul>
       </div>
     </div>
